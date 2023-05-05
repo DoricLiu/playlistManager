@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Youtube</title>
+  </head>
+  <body>
+<div id="player" text-align:center;></div>
+    <span id="AnswerBox" style="font-size:12px;"></span>¡@
+    <script>
+var url = location.href;
+      function setCookie(name,value) 
+      { 
+          var Days = 30; 
+    	  var exp = new Date(); 
+    	  exp.setTime(exp.getTime() + Days*24*60*60*1000); 
+    	  document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString(); 
+      }
+function getCookie(cookieName) {
+  var name = cookieName + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0; i<ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0)==' ') c = c.substring(1);
+      if (c.indexOf(name) == 0) return c.substring(name.length,c.length);
+  }
+  return "";
+}
+
+      var tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+		
+	  width:575,
+          height:350,
+	  videoId:'INSERT_POS', 
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+          }
+        });
+      }
+      function onPlayerReady(event) {
+        event.target.playVideo();
+	setCookie("PlayerState","Playing");
+      }
+      var done = false;      
+	function onPlayerStateChange(event) {
+        if (event.data == 0) {
+	setCookie("PlayerState","Ended");
+	document.getElementById("AnswerBox").innerHTML='Loading... ';
+        }
+      }
+      function stopVideo() {
+        player.stopVideo();
+	setCookie("PlayerState","Stop");
+      }
+    </script>
+  </body>
+</html>
